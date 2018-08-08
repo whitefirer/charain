@@ -379,6 +379,11 @@ if __name__ == "__main__":
         for k in range(h):
             j = h - 1 - k
             for i in range(w):
+                cur_char = console.GetCharByPos(i, j)
+
+                if cur_char.Char.UnicodeChar == ' ':
+                    continue
+                    
                 ax = i
                 ay = j
                 if key == VK_RETURN:
@@ -396,11 +401,6 @@ if __name__ == "__main__":
                 next_char = None
                 if ax >= 0 and ax < w and ay < h and ay >= 0:
                     next_char = console.GetCharByPos(ax, ay)
-                
-                cur_char = console.GetCharByPos(i, j)
-
-                if cur_char.Char.UnicodeChar == ' ':
-                    continue
                 
                 if (next_char and next_char.Char.UnicodeChar == ' ') \
                     and ( j < h ) \
