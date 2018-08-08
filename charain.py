@@ -239,7 +239,8 @@ class Console:
     def ClearScreen(self):
         cmd_info = CONSOLE_SCREEN_BUFFER_INFO()
         GetConsoleScreenBufferInfo(self.hStdout, byref(cmd_info))
-        FillConsoleOutputCharacter(self.hStdout, CHAR_INFO(UCHAR(' '), 0), cmd_info.dwSize.X*cmd_info.dwSize.Y, COORD(0, 0))
+        cCharsWritten = DWORD()
+        FillConsoleOutputCharacter(self.hStdout, CHAR_INFO(UCHAR(' '), 0), cmd_info.dwSize.X*cmd_info.dwSize.Y, COORD(0, 0), byref(cCharsWritten))
 
     def SetText(self, x, y, text, fore_color='default', back_color='black'):
         fore = cc_map.get(fore_color, 0xF0)
