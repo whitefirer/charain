@@ -36,6 +36,8 @@ cc_map = {
 
 GetStdHandle = windll.kernel32.GetStdHandle
 CloseHandle = windll.kernel32.CloseHandle
+GetConsoleCursorInfo = windll.kernel32.GetConsoleCursorInfo
+SetConsoleCursorInfo = windll.kernel32.SetConsoleCursorInfo
 GetConsoleScreenBufferInfo = windll.kernel32.GetConsoleScreenBufferInfo
 SetConsoleTextAttribute = windll.kernel32.SetConsoleTextAttribute
 WriteConsoleOutput = windll.kernel32.WriteConsoleOutputW
@@ -91,6 +93,11 @@ class CONSOLE_SCREEN_BUFFER_INFO(Structure):
                 ('dwMaximumWindowSize', COORD),
                 ]
 
+
+class CONSOLE_CURSOR_INFO(Structure):
+    _fields_ = [('dwSize', DWORD),
+                ('bVisible', BOOL),
+                ]
 
 '''
 ref_url: https://docs.microsoft.com/en-us/windows/console/key-event-record-str
@@ -191,15 +198,18 @@ class Console:
         self.input_size = 1
         self.input_record = INPUT_RECORD()#[INPUT_RECORD() for i in range(self.input_size)]
         self.cNumRead = DWORD(0)
+        self.cci = CONSOLE_CURSOR_INFO()
+        GetConsoleCursorInfo(self.hStdout, byref(self.cci))
 
     def __del__(self):
         self.ClearScreen()
+        console.ShowCursor()
         os.system('cls')
         CloseHandle(self.hStdin)
         CloseHandle(self.hStdout)
         
 
-    def InitConsle(self):
+    def Init(self):
         self.col, self.row = self.GetWH()
         self.charInfoArray = [CHAR_INFO(UCHAR(' '), 0) for i in range(self.col*self.row)]
 
@@ -212,6 +222,14 @@ class Console:
         # if h > 20:
         #     h = 20
         return w, h
+
+    def ShowCursor(self):
+        self.cci.bVisible = True
+        SetConsoleCursorInfo(self.hStdout, byref(self.cci))
+
+    def HideCursor(self):
+        self.cci.bVisible = False
+        SetConsoleCursorInfo(self.hStdout, byref(self.cci))
 
     def GetCurColor(self):
         cmd_info = CONSOLE_SCREEN_BUFFER_INFO()
@@ -327,7 +345,8 @@ class Console:
 
 
 def Start(console):
-    console.InitConsle()
+    console.Init()
+    console.HideCursor()
     console.ClearScreen()
     console.SetText(34, 2, 'charain', 'lightcyan')
     console.SetText(20, 3, 'Hello world!', 'yellow')
