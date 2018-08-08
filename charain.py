@@ -189,6 +189,12 @@ class INPUT_RECORD(Structure):
                 ('Event', EVENT)
                 ]
 
+
+def is_chinese(uchar):
+        if not('\u4e00' <= uchar <= '\u9fa5'):
+            return False
+        return True
+
 class Console:
     def __init__(self):
         self.hStdout = GetStdHandle(STD_OUTPUT_HANDLE)
@@ -203,7 +209,7 @@ class Console:
 
     def __del__(self):
         self.ClearScreen()
-        console.ShowCursor()
+        self.ShowCursor()
         os.system('cls')
         CloseHandle(self.hStdin)
         CloseHandle(self.hStdout)
@@ -259,7 +265,7 @@ class Console:
             self.charInfoArray[self.col*y+x+i].Char.UnicodeChar = text[i]
             #self.charInfoArray[self.col*y+x+i].Char.AsciiChar = ord(text[i])
             self.charInfoArray[self.col*y+x+i].Attributes = fore + back
-
+            
 
     def GetCharByPos(self, x, y):
         return self.charInfoArray[self.col*y+x]
@@ -360,7 +366,6 @@ def Start(console):
 
     console.SetText(20, 8, 'I love Coding forever! Have fun! --By whitefirer', 'cyan')
     console.SetText(58, 8, 'whitefirer', 'lightblue')
-    
     console.SetText(27, 8, 'Coding', 'lightmagenta')
     
     console.DrawToConsole()
@@ -370,7 +375,7 @@ if __name__ == "__main__":
     os.system('cls')
 
     console = Console()
-
+    
     if console.row < 8:
         input('console`s row should be >= 8.press anykey to end the program.')
         del console
@@ -425,7 +430,7 @@ if __name__ == "__main__":
                 if (next_char and next_char.Char.UnicodeChar == ' ') \
                     and ( j < h ) \
                     and ( i < w ) \
-                    and (i >= 0):
+                    and ( i >= 0 ):
                     console.SetCharByPos(i, j, CHAR_INFO(UCHAR(' '), 0))
                     console.SetCharByPos(ax, ay, cur_char)
                     
