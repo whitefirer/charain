@@ -350,8 +350,13 @@ if __name__ == "__main__":
     os.system('cls')
 
     console = Console()
-    Start(console)
 
+    if console.row < 8:
+        input('console`s row should be >= 8.press anykey to end the program.')
+        del console
+        exit(0)
+
+    Start(console)
     w, h = console.GetWH()
     key = 0
     t = time.time()
