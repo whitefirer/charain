@@ -223,10 +223,6 @@ class Console:
         cmd_info = CONSOLE_SCREEN_BUFFER_INFO()
         GetConsoleScreenBufferInfo(self.hStdout, byref(cmd_info))
         w, h = cmd_info.dwSize.X, cmd_info.srWindow.Right + 1
-        # if w > 200:
-        #     w = 200
-        # if h > 20:
-        #     h = 20
         return w, h
 
     def ShowCursor(self):
@@ -434,11 +430,6 @@ if __name__ == "__main__":
                     console.SetCharByPos(i, j, CHAR_INFO(UCHAR(' '), 0))
                     console.SetCharByPos(ax, ay, cur_char)
                     
-                    # if key in (VK_LEFT, VK_RIGHT):
-                    #     if not ( ax % int(w/h) ):
-                    #         changed = True
-                    # else:
-                    #     changed = True
                 else:
                     pass
 
