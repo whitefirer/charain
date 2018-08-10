@@ -117,6 +117,7 @@ value: wVirtualKeyCode
 ref_url: https://docs.microsoft.com/zh-cn/windows/desktop/inputdev/virtual-key-codes
 description: Virtual-Key Codes 太多了，只取了自己要用的上下左右
 '''
+VK_NONE   = 0x00  # NO key
 VK_ESCAPE = 0x1B  # ESC key
 VK_LEFT   = 0x25  # LEFT ARROW key
 VK_UP     = 0x26  # UP ARROW key
@@ -206,7 +207,7 @@ class Console:
         self.cNumRead = DWORD(0)
         self.cci = CONSOLE_CURSOR_INFO()
         GetConsoleCursorInfo(self.hStdout, byref(self.cci))
-
+        
     def __del__(self):
         self.ClearScreen()
         self.ShowCursor()
@@ -379,21 +380,26 @@ if __name__ == "__main__":
 
     Start(console)
     w, h = console.GetWH()
-    key = 0
+    key = VK_NONE
     t = time.time()
+    changed = False
+
     while(True):
+        if not changed:
+            time.sleep(0.02)
+
         vk_key = console.ReadKeyDown()
-        #console.DrawText(0, 0, str(time.time()), 'blue')
         if vk_key:
             if vk_key == VK_ESCAPE:
                 break
             elif vk_key == VK_SPACE:
                 Start(console)
-                key = 0
+                key = VK_NONE
             elif vk_key == VK_RETURN:
-                key = 0
+                key = VK_NONE
             else:
                 key = vk_key
+        
         console.ClearInput()
 
         changed = False
@@ -410,7 +416,7 @@ if __name__ == "__main__":
                 if key == VK_RETURN:
                     continue
 
-                if key not in (VK_LEFT, VK_RIGHT, VK_UP, 0):
+                if key not in (VK_LEFT, VK_RIGHT, VK_UP, VK_NONE):
                     ay = j + random.randint(0, 1)
                 elif key == VK_UP:
                     ay = j - random.randint(0, 1)
@@ -430,9 +436,13 @@ if __name__ == "__main__":
                     console.SetCharByPos(i, j, CHAR_INFO(UCHAR(' '), 0))
                     console.SetCharByPos(ax, ay, cur_char)
                     
+                    changed = True
                 else:
                     pass
 
-        if changed or time.time() - t > 0.02:
+        if not changed:
+            continue
+
+        if time.time() - t > 0.02:
             t = time.time()
             console.DrawToConsole()
