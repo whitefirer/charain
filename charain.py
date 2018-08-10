@@ -440,9 +440,6 @@ if __name__ == "__main__":
                 else:
                     pass
 
-        if not changed:
-            continue
-
         if time.time() - t > 0.02:
             t = time.time()
             console.DrawToConsole()
