@@ -38,7 +38,6 @@ if __name__ == "__main__":
 
     Start(console)
     w, h = console.GetWH()
-    w, h = w, h
     key = VK_NONE
     console.ReadKeyDown()
     console.ClearInput()
@@ -78,8 +77,7 @@ if __name__ == "__main__":
                 if cur_char.Char.UnicodeChar == ' ':
                     continue
 
-                ax = i
-                ay = j
+                ax, ay = i, j
                 if key == VK_RETURN:
                     continue
 
