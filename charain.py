@@ -15,10 +15,11 @@ def Start(console):
     console.SetText(20, 3, 'Hello world!', 'yellow')
     console.SetText(20, 4, 'You can use ← ↑ ↓ → to contrl the chars')
     console.SetText(32, 4, '← ↑ ↓ →', 'red')
-    console.SetText(20, 5, 'ESC to exit, SPACE to restart', 'green')
+    console.SetText(20, 5, 'ESC to exit, SPACE to restart, ENTER to autoplay', 'green')
     console.SetText(20, 5, 'ESC', 'red')
     console.SetText(33, 5, 'SPACE', 'red')
-    console.SetText(20, 6, 'Any other keys to let them fall down', 'green')
+    console.SetText(51, 5, 'ENTER', 'red')
+    console.SetText(20, 6, 'Press any other keys to let them fall down', 'green')
 
     console.SetText(20, 8, 'I love Coding forever! Have fun! --By whitefirer', 'brown')
     console.SetText(58, 8, 'whitefirer', 'blue')
@@ -39,26 +40,34 @@ if __name__ == "__main__":
     w, h = console.GetWH()
     w, h = w, h
     key = VK_NONE
+    console.ReadKeyDown()
+    console.ClearInput()
     t = time.time()
     changed = False
+    auto_flag = False
 
     while(True):
         if not changed:
             time.sleep(0.02)
 
-        vk_key = console.ReadKeyDown()
+        if auto_flag and not changed:
+            vk_key = random.choice([VK_LEFT, VK_RIGHT, VK_DOWN, VK_UP])
+        else:
+            vk_key = console.ReadKeyDown()
+            console.ClearInput()
+
         if vk_key > 0:
             if vk_key == VK_ESCAPE:
                 break
             elif vk_key == VK_SPACE:
                 Start(console)
                 key = VK_NONE
+                auto_flag = False
             elif vk_key == VK_RETURN:
                 key = VK_NONE
+                auto_flag = not auto_flag
             else:
                 key = vk_key
-
-        console.ClearInput()
 
         changed = False
         for k in range(h):

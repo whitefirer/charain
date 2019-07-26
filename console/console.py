@@ -36,7 +36,7 @@ VK_LEFT   = curses.KEY_LEFT #0x25  # LEFT ARROW key
 VK_UP     = curses.KEY_UP #0x26  # UP ARROW key
 VK_RIGHT  = curses.KEY_RIGHT #0x27  # RIGHT ARROW key
 VK_DOWN   = curses.KEY_DOWN #0x28  # DOWN ARROW key
-VK_RETURN = 0x0D  # ENTER key
+VK_RETURN = 0x0A  # ENTER key
 VK_SPACE  = 0x20  # SPACEBAR
 
 class UCHAR:
