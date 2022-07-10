@@ -1,5 +1,6 @@
-# charain
-字符雨 python3.6 on windows&linux
+# charain. 
+字符雨  
+Python3.6+ on Windows&Linux&MacOS
 
 ### 说明
 
